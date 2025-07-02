@@ -1415,8 +1415,18 @@ function Room() {
           )}
         </VStack>
       </Container>
+      {/* Modal for admin transfer */}
+      {/* 
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>Centered>
+        <ModalOverlay />ay />
+        <ModalContent>alContent>
+          ...modal content here...l content here...
+        </ModalContent>
+      </Modal>
+      */}
     </Box>
   );
 }
 
-export default Room; 
+
+export default Room;
