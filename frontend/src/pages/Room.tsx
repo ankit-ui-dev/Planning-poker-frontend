@@ -1417,10 +1417,10 @@ function Room() {
       </Container>
       {/* Modal for admin transfer */}
       {/* 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>Centered>
-        <ModalOverlay />ay />
-        <ModalContent>alContent>
-          ...modal content here...l content here...
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          ...modal content here...
         </ModalContent>
       </Modal>
       */}
