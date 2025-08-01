@@ -156,13 +156,21 @@ const PlayerCard = ({
   card, 
   isCurrentPlayer,
   position,
-  totalPlayers
+  totalPlayers,
+  roomId,
+  playerName,
+  isAdmin,
+  onAdminChange
 }: { 
   player: Player; 
   card?: Card; 
   isCurrentPlayer: boolean;
   position: number;
   totalPlayers: number;
+  roomId: number;
+  playerName: string;
+  isAdmin: boolean;
+  onAdminChange: (playerId: number) => void;
 }) => {
   const playerColor = getPlayerColor(player.id);
   const layout = getTableLayout(totalPlayers);
@@ -279,6 +287,19 @@ const PlayerCard = ({
             </VStack>
           </Box>
         </Box>
+
+        {/* Admin Controls - Show only for current player if they are admin */}
+        {isAdmin && player.name !== playerName && (
+          <Button
+            size="xs"
+            colorScheme="purple"
+            variant="outline"
+            onClick={() => onAdminChange(player.id)}
+            ml={2}
+          >
+            Make Admin
+          </Button>
+        )}
       </VStack>
     </Box>
   );
@@ -1339,6 +1360,32 @@ function Room() {
                         isCurrentPlayer={player.name === playerName}
                         position={index}
                         totalPlayers={players.length}
+                        roomId={roomId ?? 0}
+                        playerName={playerName}
+                        isAdmin={isAdmin}
+                        onAdminChange={async (playerId) => {
+                          try {
+                            await axios.post(
+                              `http://localhost:3001/api/rooms/${roomId}/players/${playerId}/make-admin`
+                            );
+                            toast({
+                              title: 'Admin Granted',
+                              description: `${player.name} is now an admin.`,
+                              status: 'success',
+                              duration: 3000,
+                              isClosable: true,
+                            });
+                            // Optionally update local state or refetch players
+                          } catch (error) {
+                            toast({
+                              title: 'Error',
+                              description: 'Failed to make admin',
+                              status: 'error',
+                              duration: 3000,
+                              isClosable: true,
+                            });
+                          }
+                        }}
                       />
                     ))}
                   </PokerTable>

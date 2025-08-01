@@ -388,7 +388,25 @@ app.post('/api/rooms/:roomId/reset', async (req, res) => {
   }
 });
 
+// Promote a player to admin
+app.post('/api/rooms/:roomId/players/:playerId/make-admin', async (req, res) => {
+  try {
+    const { roomId, playerId } = req.params;
+    // Only allow if the requester is an admin (add your own auth logic here if needed)
+    await pool.query(
+      'UPDATE players SET is_admin = true WHERE id = $1 AND room_id = $2',
+      [playerId, roomId]
+    );
+    // Optionally, emit a socket event to notify clients
+    io.to(roomId).emit('player_promoted', { playerId: Number(playerId) });
+    res.json({ success: true });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to promote player to admin' });
+  }
+});
+
 const PORT = process.env.PORT || 3001;
 server.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});
